@@ -4,7 +4,7 @@ class SudokuSolver:
     Solves a 9x9 sudoku grid using a heuristic based backtracking algorithm
     """
 
-    def getPossibilities(self, grid, i, j):
+    def get_possibilities(self, grid, i, j):
         # generate set of numbers [1,9]
         # Remove any digits that are in the same row, column or sector
         poss = set(range(1,10))
@@ -42,7 +42,7 @@ class SudokuSolver:
             for j in range(9):
                 if(grid[i][j] is None):
                     isComplete = False
-                    poss = self.getPossibilities(grid,i,j)
+                    poss = self.get_possibilities(grid,i,j)
                     if(len(poss) < len(minPos)):
                         minPos = poss
                         minCoords = (i,j)        

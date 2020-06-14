@@ -1,4 +1,4 @@
-def prettyPrint(grid):
+def pretty_print(grid):
     s = ""
     for i in range(9):
         if(i % 3 == 0 and i > 0): 
