@@ -67,6 +67,7 @@ class Solver:
                 else:
                     candiate = poss.pop()
                     grid[i][j] = candiate
+                    self.view.update_square(i,j,candiate)
                     gridArgument = deepcopy(grid)
                     result = self.solve(gridArgument)
             return result
