@@ -1,7 +1,7 @@
 import solver
 import printer
 
-def get_grid(filepath):
+def get_grid_from_filepath(filepath):
     grid = []
     with open(filepath, 'r') as f:
         for line in f:
@@ -15,10 +15,8 @@ def get_grid(filepath):
             grid.append(row)
     return grid
 
-
 if __name__ == "__main__":
-    grid = get_grid("hard.txt")
-    print(grid)
+    grid = get_grid_from_filepath("input/hard.txt")
     solver = solver.SudokuSolver()
     answer = solver.solve(grid)
     if(answer is None):
