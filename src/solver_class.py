@@ -1,8 +1,15 @@
 from copy import copy, deepcopy
+from gui_class import Gui
+
 class Solver:
     """
     Solves a 9x9 sudoku grid using a heuristic based backtracking algorithm
     """
+
+    def __init__(self, grid):
+        self.model = grid
+        self.view = Gui(grid)
+
 
     def get_possibilities(self, grid, i, j):
         # generate set of numbers [1,9]
@@ -28,6 +35,7 @@ class Solver:
                     poss.remove(k)
         return poss
 
+    # TODO shouldnt require grid on first call
     def solve(self, grid):
         # Heuristic based backtracking 
         # Heursitic: Try the grid cell with the least number of possiblities first 
@@ -57,7 +65,8 @@ class Solver:
                 if(len(poss) == 0):
                     return None
                 else:
-                    grid[i][j] = poss.pop()
+                    candiate = poss.pop()
+                    grid[i][j] = candiate
                     gridArgument = deepcopy(grid)
                     result = self.solve(gridArgument)
             return result
