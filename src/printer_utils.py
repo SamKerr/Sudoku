@@ -15,3 +15,17 @@ def pretty_print(grid):
                 s += " | "
         s += "\n"
     return s 
+
+def get_grid_from_filepath(filepath):
+    grid = []
+    with open(filepath, 'r') as f:
+        for line in f:
+            row = []
+            vals = line.rstrip().split(" ")
+            for v in vals: 
+                if(v == 'X'):
+                    row.append(None)
+                else:
+                    row.append(int(v))
+            grid.append(row)
+    return grid

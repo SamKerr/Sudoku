@@ -1,5 +1,5 @@
 from copy import copy, deepcopy
-class SudokuSolver:
+class Solver:
     """
     Solves a 9x9 sudoku grid using a heuristic based backtracking algorithm
     """
