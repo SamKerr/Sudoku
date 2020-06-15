@@ -1,10 +1,18 @@
 from copy import copy, deepcopy
-class SudokuSolver:
+from gui_class import Gui
+import pygame as pg 
+
+class Solver:
     """
     Solves a 9x9 sudoku grid using a heuristic based backtracking algorithm
     """
 
-    def getPossibilities(self, grid, i, j):
+    def __init__(self, grid):
+        self.model = grid
+        self.view = Gui(grid)
+
+
+    def get_possibilities(self, grid, i, j):
         # generate set of numbers [1,9]
         # Remove any digits that are in the same row, column or sector
         poss = set(range(1,10))
@@ -28,21 +36,20 @@ class SudokuSolver:
                     poss.remove(k)
         return poss
 
-    def solve(self, grid):
-        # Heuristic based backtracking 
+    def backtracking_solver(self, grid):
+        # Heuristic based backtracking sudoku solver 
         # Heursitic: Try the grid cell with the least number of possiblities first 
         # Try each possibility for the cell, calling on solve recursively until either
         #           (i) a grid cell with 0 possibilities is found, on which we backtrack and try the next possibility
         #           (ii) A grid with no empty cells is found
 
-        # Note: minPos has 10 elements which is larger than any number of possibilities in 9x9 sudoku
         isComplete = True
         minPos, minCoords = set(range(10)), (None,None) 
         for i in range(9):
             for j in range(9):
                 if(grid[i][j] is None):
                     isComplete = False
-                    poss = self.getPossibilities(grid,i,j)
+                    poss = self.get_possibilities(grid,i,j)
                     if(len(poss) < len(minPos)):
                         minPos = poss
                         minCoords = (i,j)        
@@ -50,14 +57,33 @@ class SudokuSolver:
         if(isComplete):
             return grid
         else: 
+            result = None 
             i,j = minCoords
             poss = minPos
-            result = None 
             while(result == None):
                 if(len(poss) == 0):
                     return None
                 else:
-                    grid[i][j] = poss.pop()
+                    # get candidate for square
+                    candiate = poss.pop()
+                    grid[i][j] = candiate
+                    
+                    # Update model
                     gridArgument = deepcopy(grid)
-                    result = self.solve(gridArgument)
+                    result = self.backtracking_solver(gridArgument)
+
+                    # update GUI
+                    self.view.update_square(i,j,candiate)
             return result
+
+    def solve(self):
+        answer = self.backtracking_solver(self.model)
+        if answer != None: 
+            self.view.puzzle_solved()
+        else: 
+            self.view.puzzle_failed()
+        
+        while True:
+            event = pg.event.wait()
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q): 
+                raise SystemExit
