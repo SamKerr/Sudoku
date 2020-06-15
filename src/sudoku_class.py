@@ -7,8 +7,5 @@ class Sudoku:
         self.controller = Solver(self.model)
 
     def play_with_solver(self):
-        answer = self.controller.solve(self.model)
-        if(answer is None):
-            print("No solution is possible :(")
-        else:
-            print(pretty_print(answer))
+        self.controller.solve()
+

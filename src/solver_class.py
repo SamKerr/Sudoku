@@ -1,5 +1,6 @@
 from copy import copy, deepcopy
 from gui_class import Gui
+import pygame as pg 
 
 class Solver:
     """
@@ -35,15 +36,13 @@ class Solver:
                     poss.remove(k)
         return poss
 
-    # TODO shouldnt require grid on first call
-    def solve(self, grid):
-        # Heuristic based backtracking 
+    def backtracking_solver(self, grid):
+        # Heuristic based backtracking sudoku solver 
         # Heursitic: Try the grid cell with the least number of possiblities first 
         # Try each possibility for the cell, calling on solve recursively until either
         #           (i) a grid cell with 0 possibilities is found, on which we backtrack and try the next possibility
         #           (ii) A grid with no empty cells is found
 
-        # Note: minPos has 10 elements which is larger than any number of possibilities in 9x9 sudoku
         isComplete = True
         minPos, minCoords = set(range(10)), (None,None) 
         for i in range(9):
@@ -58,16 +57,33 @@ class Solver:
         if(isComplete):
             return grid
         else: 
+            result = None 
             i,j = minCoords
             poss = minPos
-            result = None 
             while(result == None):
                 if(len(poss) == 0):
                     return None
                 else:
+                    # get candidate for square
                     candiate = poss.pop()
                     grid[i][j] = candiate
-                    self.view.update_square(i,j,candiate)
+                    
+                    # Update model
                     gridArgument = deepcopy(grid)
-                    result = self.solve(gridArgument)
+                    result = self.backtracking_solver(gridArgument)
+
+                    # update GUI
+                    self.view.update_square(i,j,candiate)
             return result
+
+    def solve(self):
+        answer = self.backtracking_solver(self.model)
+        if answer != None: 
+            self.view.puzzle_solved()
+        else: 
+            self.view.puzzle_failed()
+        
+        while True:
+            event = pg.event.wait()
+            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q): 
+                raise SystemExit
