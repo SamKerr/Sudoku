@@ -82,8 +82,3 @@ class Solver:
             self.view.puzzle_solved()
         else: 
             self.view.puzzle_failed()
-        
-        while True:
-            event = pg.event.wait()
-            if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_q): 
-                raise SystemExit

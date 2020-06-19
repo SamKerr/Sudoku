@@ -15,11 +15,12 @@ class Gui:
         self.grid = model
         self.g_height = len(model)
         self.w_height = len(model[0])  
-
         # initialise the display
         # set up pygame
         pg.init()
+        self.start_game()
 
+    def start_game(self):
         # set dimensions
         self.rect_height, self.rect_width, self.margin  = 140, 140, 3
         self.total_rect_height, self.total_rect_width   = tuple(map(lambda x: 2*self.margin+x, (self.rect_height, self.rect_width))) 
