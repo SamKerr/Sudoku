@@ -1,4 +1,7 @@
 import pygame as pg
+from typing import Tuple, List, Optional
+
+Colour = Tuple[int, int, int]
 
 BLACK = (0,0,0)
 WHITE = (255,255,255)
@@ -6,23 +9,24 @@ RED = (255,0,0)
 GREEN = (0,255,0)
 BLUE = (0,0,255)
 
-def text_objects(text, font, text_colour):
+def text_objects(text: str, font: str, text_colour: Colour) -> Tuple[pg.Surface, pg.Rect]:
     textSurface = font.render(text, True, text_colour)
-    return textSurface, textSurface.get_rect()
+    print(type(textSurface.get_rect()))
+    return (textSurface, textSurface.get_rect())
 
 class Gui:
-    def __init__(self, model):
-        self.grid = model
-        self.g_height = len(model)
-        self.w_height = len(model[0])  
+    def __init__(self, model: List[List[Optional[int]]]):
+        self.grid: List[List[Optional[int]]] = model
+        self.g_height: int = len(model)
+        self.w_height: int = len(model[0])  
         # initialise the display
         # set up pygame
         pg.init()
         self.start_game()
 
-    def start_game(self):
+    def start_game(self)-> None:
         # set dimensions
-        self.rect_height, self.rect_width, self.margin  = 140, 140, 3
+        self.rect_height, self.rect_width, self.margin  = 70, 70, 1
         self.total_rect_height, self.total_rect_width   = tuple(map(lambda x: 2*self.margin+x, (self.rect_height, self.rect_width))) 
         self.winsize = self.width, self.height          = tuple(map(lambda x: x*9, (self.total_rect_width, self.total_rect_height)))
 
@@ -39,12 +43,12 @@ class Gui:
                 self.draw_grid_square(row,col,val)
         pg.display.flip()
 
-    def update_square(self, row, col, val):
+    def update_square(self, row: int, col: int, val: int)-> None:
         self.grid[row][col] = val
         self.draw_grid_square(row,col,val, RED)
         pg.display.flip()
 
-    def draw_grid_square(self, row, col, val, text_colour=BLACK):
+    def draw_grid_square(self, row:int, col:int, val: int, text_colour: Colour=BLACK)-> None:
         txt = ""
         if val is None:
             txt = "X"
@@ -59,7 +63,7 @@ class Gui:
         TextRect.center = (rect[0] + self.total_rect_width/2, rect[1] + self.total_rect_height/2)
         self.screen.blit(TextSurf, TextRect)
 
-    def puzzle_solved(self):
+    def puzzle_solved(self)-> None:
         # pause for effect!
         pg.time.delay(100)
         for row in range(self.g_height):
@@ -74,7 +78,7 @@ class Gui:
                 self.draw_grid_square(row,col,val)
         pg.display.flip()
     
-    def puzzle_failed(self):
+    def puzzle_failed(self)-> None:
         pg.time.delay(1000)
         message = "No solution possible :("
         delta = 2*self.margin

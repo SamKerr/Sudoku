@@ -1,21 +1,22 @@
 from copy import copy, deepcopy
-from gui_class import Gui
+from gui import Gui
 import pygame as pg 
+from typing import List, Optional,Tuple
 
 class Solver:
     """
     Solves a 9x9 sudoku grid using a heuristic based backtracking algorithm
     """
 
-    def __init__(self, grid):
-        self.model = grid
-        self.view = Gui(grid)
+    def __init__(self, grid: List[List[Optional[int]]]):
+        self.model: List[List[Optional[int]]] = grid
+        self.view: Gui = Gui(grid)
 
 
-    def get_possibilities(self, grid, i, j):
-        # generate set of numbers [1,9]
-        # Remove any digits that are in the same row, column or sector
+    def get_possibilities(self, grid: List[List[Optional[int]]], i: int, j: int):
+        # generate set of numbers [1,9] and then remove any digits that are in the same row, column or sector
         poss = set(range(1,10))
+        
         # remove row elements
         for k in grid[i]:
             if(k in poss):
@@ -36,7 +37,7 @@ class Solver:
                     poss.remove(k)
         return poss
 
-    def backtracking_solver(self, grid):
+    def backtracking_solver(self, grid: List[List[Optional[int]]])-> Optional[List[List[int]]]:
         # Heuristic based backtracking sudoku solver 
         # Heursitic: Try the grid cell with the least number of possiblities first 
         # Try each possibility for the cell, calling on solve recursively until either

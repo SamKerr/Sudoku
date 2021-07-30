@@ -1,4 +1,6 @@
-def pretty_print(grid):
+from typing import List,Optional
+
+def pretty_print(grid: List[List[Optional[int]]]) -> str:
     s = ""
     for i in range(9):
         if(i % 3 == 0 and i > 0): 
@@ -16,7 +18,7 @@ def pretty_print(grid):
         s += "\n"
     return s 
 
-def get_grid_from_filepath(filepath):
+def get_grid_from_filepath(filepath: str) -> List[List[Optional[int]]]:
     grid = []
     with open(filepath, 'r') as f:
         for line in f:
